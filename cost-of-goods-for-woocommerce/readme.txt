@@ -2,8 +2,8 @@
 Contributors: wpcodefactory, omardabbas, karzin, anbinder, kousikmukherjeeli
 Tags: woocommerce, cost, cost of goods, profit, profit calculator
 Requires at least: 6.1
-Tested up to: 6.8
-Stable tag: 3.9.2
+Tested up to: 6.9
+Stable tag: 4.0.7
 License: GNU General Public License v3.0
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -343,6 +343,57 @@ Once activated, access the plugin's settings by navigating to “WooCommerce > S
 6. Cost of goods columns in "Analytics > Orders" report.
 
 == Changelog ==
+
+= 4.0.7 - 02/02/2026 =
+* Fix - Analytics - Products - Prevented possible inconsistency on profit total.
+
+= 4.0.6 - 28/01/2026 =
+* Orders - Improved "Extra Costs: From Meta" description.
+
+= 4.0.5 - 23/01/2026 =
+* WC tested up to: 10.4.
+* Dev - Updated Key Manager library to version 1.0.8.
+* Improved Settings text from Analytics and Multicurrency sections.
+
+= 4.0.4 - 22/12/2025 =
+* Updated cross-selling library to version 1.0.9.
+
+= 4.0.3 - 17/12/2025 =
+* Updated cross-selling library to version 1.0.7.
+
+= 4.0.2 - 09/12/2025 =
+* Dev - Products - Added new option to normalize cost while importing CSV.
+* Tested up to: 6.9.
+
+= 4.0.1 - 01/12/2025 =
+* Dev - Tools - Added new option to filter bulk edit products by attributes.
+
+= 4.0.0 - 20/11/2025 =
+* Fix - Trying to avoid get_id() on bool error.
+
+= 3.9.9 - 20/11/2025 =
+* Dev - Advanced - Added the `woocommerce_update_order` hook to the option Order calculation hooks.
+
+= 3.9.8 - 10/11/2025 =
+* Dev - Products - Last Update Date now being saved as `_alg_wc_cog_last_update_date` meta.
+
+= 3.9.7 - 07/11/2025 =
+* Dev - Products - Added new option to set a last update date template.
+* Dev - Products - Added new option to display a last update date as cost input description on admin product pages.
+* Dev - Products - Improved Standards on Cost Archive code.
+
+= 3.9.6 - 06/11/2025 =
+* Fix - Products - Improved reliability of Cost and Add Stock fields on Quick end Bulk Edit.
+* WC tested up to: 10.3.
+
+= 3.9.5 - 29/10/2025 =
+* Fix - Add stock - Fixed Uncaught TypeError: Cannot access offset of type string.
+
+= 3.9.4 - 22/10/2025 =
+* Fix - Add stock - Fixed Uncaught TypeError: Cannot access offset of type string.
+
+= 3.9.3 - 17/10/2025 =
+* Fix - Products - Cost field was not working with the "Bulk actions > Edit" option.
 
 = 3.9.2 - 22/09/2025 =
 * Fix - Analytics - Improved stock calculation.

@@ -2,7 +2,7 @@
 /**
  * Cost of Goods for WooCommerce - Products - Cost archive.
  *
- * @version 3.3.3
+ * @version 3.9.8
  * @since   2.8.2
  * @author  WPFactory
  */
@@ -56,6 +56,70 @@ if ( ! class_exists( 'Alg_WC_Cost_of_Goods_Products_Cost_Archive' ) ) {
 						'side'
 					);
 				}
+			}
+		}
+
+		/**
+		 * get_product_cost_last_update_date.
+		 *
+		 * @version 3.9.8
+		 * @since   3.9.7
+		 *
+		 * @param   null  $args
+		 *
+		 * @throws Exception
+		 * @return void
+		 */
+		function get_product_cost_last_update_date( $args = null ) {
+			if ( 'yes' !== alg_wc_cog_get_option( 'alg_wc_cog_save_cost_archive', 'no' ) ) {
+				return null;
+			}
+
+			// Args.
+			$args = wp_parse_args( $args, array(
+				'product_id'        => '',
+				'return_method'     => 'date', // 'date','template',
+				'maybe_create_meta' => true
+			) );
+			$update_date_meta = '_alg_wc_cog_last_update_date';
+			$product_id = $args['product_id'];
+			$product = wc_get_product( $product_id );
+			$return_method = $args['return_method'];
+			$maybe_create_meta = filter_var( $args['maybe_create_meta'], FILTER_VALIDATE_BOOLEAN );
+
+			// Archive.
+			if ( empty( $date = $product->get_meta( $update_date_meta, true ) ) ) {
+				$archive = $this->get_product_cost_archive( array(
+					'product_id' => $product_id,
+					'order'      => 'desc',
+					'orderby'    => 'update_datetime'
+				) );
+				if ( ! empty( $archive ) ) {
+					$date = $archive[0]['update_date'];
+					if ( $maybe_create_meta ) {
+						$product->update_meta_data( $update_date_meta, $date );
+						$product->save();
+					}
+				}
+			}
+
+			if ( ! empty( $date ) ) {
+				$date_formatted = wp_date( get_option( 'alg_wc_cog_save_cost_archive_date_format', 'Y-m-d' ), $date );
+				switch ( $return_method ) {
+					case 'date':
+						return $date;
+						break;
+					case 'template':
+						$template = alg_wc_cog_get_option( 'alg_wc_cog_last_update_date_template', __( 'Last update date: %last_update_date%', 'cost-of-goods-for-woocommerce' ) );
+						$data     = array(
+							'%last_update_date%' => $date_formatted,
+						);
+
+						return '<span class="alg-wc-cog-last-cost-update-date">' . str_replace( array_keys( $data ), array_values( $data ), $template ) . '</span>';
+						break;
+				}
+			} else {
+				return null;
 			}
 		}
 
@@ -231,7 +295,7 @@ if ( ! class_exists( 'Alg_WC_Cost_of_Goods_Products_Cost_Archive' ) ) {
 		/**
 		 * save_cost_history_on_cost_update
 		 *
-		 * @version 3.1.7
+		 * @version 3.9.8
 		 * @since   2.8.2
 		 *
 		 * @param $post_id
@@ -248,12 +312,15 @@ if ( ! class_exists( 'Alg_WC_Cost_of_Goods_Products_Cost_Archive' ) ) {
 			) {
 				$prev_cost_value = (float) alg_wc_cog()->core->products->get_product_cost( $post_id );
 				if ( $prev_cost_value !== (float) $meta_value ) {
+					$update_date = current_datetime()->getTimestamp();
 					$archive = array(
-						'update_date'     => current_datetime()->getTimestamp(),
+						'update_date'     => $update_date,
 						'prev_cost_value' => $prev_cost_value,
 						'new_cost_value'  => $meta_value
 					);
-					add_post_meta( $post_id, '_alg_wc_cog_cost_archive', $archive );
+					$product->add_meta_data( '_alg_wc_cog_cost_archive', $archive, false );
+					$product->update_meta_data( '_alg_wc_cog_last_update_date', $update_date );
+					$product->save();
 				}
 			}
 		}
@@ -322,7 +389,7 @@ if ( ! class_exists( 'Alg_WC_Cost_of_Goods_Products_Cost_Archive' ) ) {
 		/**
 		 * get_variations_history_script.
 		 *
-		 * @version 3.1.7
+		 * @version 3.9.7
 		 * @since   3.1.7
 		 *
 		 * @return false|string
@@ -331,27 +398,27 @@ if ( ! class_exists( 'Alg_WC_Cost_of_Goods_Products_Cost_Archive' ) ) {
 			ob_start();
 			$ajax_nonce = wp_create_nonce( "cost_archive_table_nonce" );
 			?>
-            <script>
-                (function () {
-                    const dropdown = document.querySelector('select[name="alg_wc_cog_cost_archive_variation_id"]');
-                    dropdown.addEventListener('change', function (event) {
-                        jQuery('.alg-wc-cog-cost-archive-variation-title .spinner').addClass('is-active');
-                        let data = {
-                            action: 'get_cost_archive_table',
-                            security: '<?php echo $ajax_nonce; ?>',
-                            variation_id: event.target.value
-                        };
-                        jQuery.post(ajaxurl, data, function (response) {
-                            jQuery('.alg-wc-cog-cost-archive-variation-title .spinner').removeClass('is-active');
-                            if (response.success) {
-                                jQuery('.alg-wc-cog-cost-archive-table-container').html(response.data.html);
-                            } else {
-                                jQuery('.alg-wc-cog-cost-archive-table-container').html('');
-                            }
-                        });
-                    });
-                }());
-            </script>
+			<script>
+				( function () {
+					const dropdown = document.querySelector( 'select[name="alg_wc_cog_cost_archive_variation_id"]' );
+					dropdown.addEventListener( 'change', function ( event ) {
+						jQuery( '.alg-wc-cog-cost-archive-variation-title .spinner' ).addClass( 'is-active' );
+						let data = {
+							action: 'get_cost_archive_table',
+							security: '<?php echo $ajax_nonce; ?>',
+							variation_id: event.target.value
+						};
+						jQuery.post( ajaxurl, data, function ( response ) {
+							jQuery( '.alg-wc-cog-cost-archive-variation-title .spinner' ).removeClass( 'is-active' );
+							if ( response.success ) {
+								jQuery( '.alg-wc-cog-cost-archive-table-container' ).html( response.data.html );
+							} else {
+								jQuery( '.alg-wc-cog-cost-archive-table-container' ).html( '' );
+							}
+						} );
+					} );
+				}() );
+			</script>
 			<?php
 			$output = ob_get_contents();
 			ob_end_clean();

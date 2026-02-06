@@ -2,7 +2,7 @@
 /**
  * Cost of Goods for WooCommerce - Products Class.
  *
- * @version 3.8.4
+ * @version 4.0.2
  * @since   2.1.0
  * @author  WPFactory
  */
@@ -261,7 +261,7 @@ class Alg_WC_Cost_of_Goods_Products {
 	/**
 	 * parse_import_data.
 	 *
-	 * @version 2.7.0
+	 * @version 4.0.2
 	 * @since   1.5.1
 	 */
 	function parse_import_data( $data, $importer ) {
@@ -278,10 +278,18 @@ class Alg_WC_Cost_of_Goods_Products {
 		if ( isset( $data['meta_data'] ) && is_array( $data['meta_data'] ) && ! empty( $data['meta_data'] ) ) {
 			foreach ( $data['meta_data'] as $key => $value ) {
 				if ( '_alg_wc_cog_cost' === $value['key'] ) {
-					$data['meta_data'][ $key ]['value'] = 'yes' === get_option( 'alg_wc_cog_import_csv_get_only_cost_number', 'no' ) ? $this->get_only_number( $value['value'] ) : $value['value'];
+					$final_value = $value['value'];
+					if ( 'yes' === alg_wc_cog_get_option( 'alg_wc_cog_import_csv_get_only_cost_number', 'no' ) ) {
+						$final_value = $this->get_only_number( $final_value );
+					}
+					if ( 'yes' === alg_wc_cog_get_option( 'alg_wc_cog_import_csv_normalize_cost', 'no' ) ) {
+						$final_value = alg_wc_cog_normalize_price( $final_value );
+					}
+					$data['meta_data'][ $key ]['value'] = $final_value;
 				}
 			}
 		}
+
 		return $data;
 	}
 
@@ -516,7 +524,7 @@ class Alg_WC_Cost_of_Goods_Products {
 	/**
 	 * get_product_profit.
 	 *
-	 * @version 3.8.4
+	 * @version 4.0.0
 	 * @since   1.0.0
 	 * @todo    [next] maybe check if `wc_get_price_excluding_tax()` is numeric (e.g. maybe can return range)
 	 */
@@ -533,6 +541,10 @@ class Alg_WC_Cost_of_Goods_Products {
 		$get_price_method        = $args['get_price_method'];
 		$product                 = $args['product'];
 		$product                 = is_a( $product, 'WC_Product' ) ? $product : wc_get_product( $product_id );
+		if ( ! is_a( $product, 'WC_Product' ) ) {
+			return 0;
+		}
+
 		$product_id              = $product->get_id();
 		$cost                    = empty( $cost = $this->get_product_cost( $product_id ) ) ? 0 : $cost;
 		$price                   = empty( $price = $this->get_product_price( $product, $get_price_method ) ) ? 0 : $price;
