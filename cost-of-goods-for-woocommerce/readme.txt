@@ -2,12 +2,12 @@
 Contributors: wpcodefactory, omardabbas, karzin, anbinder, kousikmukherjeeli
 Tags: woocommerce, cost, cost of goods, profit, profit calculator
 Requires at least: 6.1
-Tested up to: 6.9
-Stable tag: 4.1.0
+Tested up to: 7.0
+Stable tag: 4.1.7
 License: GNU General Public License v3.0
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Unlock detailed insights into products profitability, calculate COGS & profit margins, and get a better financial analytics insights with our Cost of Goods Sold (COGS) plugin
+Calculate COGS & profit margins, unlock detailed insights into product profitability, and get better financial analytics with our COGS plugin
 
 == Description ==
 
@@ -80,7 +80,7 @@ ___
 
 #### 🚀 Save Historical Data for Cost of Goods ####
 
-By preserving past cost data, this feature enables businesses to track how the cost structure of their products has evolved, providing a clear window into shifts in supplier pricing, manufacturing costs, or other contributing factors. 
+By preserving past cost data, this feature enables businesses to track how the cost structure of their products has evolved, providing a clear window into shifts in supplier pricing, manufacturing costs, or other contributing factors.
 
 Such historical data becomes invaluable when analyzing profitability trends, forecasting future expenses, and making informed pricing decisions.
 
@@ -150,7 +150,7 @@ Such historical data becomes invaluable when analyzing profitability trends, for
 
 ### 🚀 Costs Bulk Edit Tools ###
 
-Navigating the financial aspects of a WooCommerce store can often be complex, especially when it comes to making widespread changes to product costs. 
+Navigating the financial aspects of a WooCommerce store can often be complex, especially when it comes to making widespread changes to product costs.
 
 Our plugin seamlessly addresses this challenge, introducing free tools that empower store owners to apply bulk changes to product costs, without the usual hassles, using these methods:
 
@@ -168,7 +168,7 @@ Once you set product costs, you can use our built-in tool to change product pric
 
 * Import and export product costs from and to a CSV file with standard WooCommerce Import and Export tools
 
-* You can also use our import tool if you need to import costs from another product metas 
+* You can also use our import tool if you need to import costs from another product metas
 
 ### 🚀 More Advanced Options ###
 
@@ -180,7 +180,7 @@ Once you set product costs, you can use our built-in tool to change product pric
 
 * Unlimited costs update hooks that can be used to trigger cost update
 
-___ 
+___
 ## 🏆 Do More: PRO Version ##
 
 Everything highlighted above —and much more— is accessible in the complimentary version. However, for those seeking to elevate their experience and dive deeper, we offer the upgraded [Cost of Goods for WooCommerce Pro](https://wpfactory.com/item/cost-of-goods-for-woocommerce/?utm_source=wporg&utm_medium=organic&utm_campaign=readme) plugin.
@@ -344,6 +344,37 @@ Once activated, access the plugin's settings by navigating to “WooCommerce > S
 
 == Changelog ==
 
+= 4.1.7 - 09/07/2026 =
+* Fix - General security improvements.
+
+= 4.1.6 - 30/06/2026 =
+* Fix - Remove external link to woo.com.
+* Fix - Fixed nonce, escaping and validation checks.
+* Fix - Prefix updated to wpfcogs.
+* WC tested up to: 10.9.
+
+= 4.1.5 - 08/06/2026 =
+* Fix - Fixed I18n issues on functions.
+* Fix - Fixed nonce, escaping and validation checks.
+* Fix - Removed unnecessary `load_plugin_textdomain()` function.
+* Fix - Changed Short Description from readme.txt.
+* Fix - Code refactoring.
+* Fix - Fixed `WordPress.WP.I18n.MissingTranslatorsComment` issues.
+* Dev - Moved translations to languages folder.
+
+= 4.1.4 - 22/05/2026 =
+* Update `$version` property.
+
+= 4.1.3 - 22/05/2026 =
+* Tested up to: 7.0.
+
+= 4.1.2 - 08/05/2026 =
+* Fix - Analytics - Fixed data inflation with the option "Orders > Extra Costs".
+
+= 4.1.1 - 06/05/2026 =
+* Fix - Improved sanitization in product cost/profit shortcodes.
+* WC tested up to: 10.7.
+
 = 4.1.0 - 12/03/2026 =
 * Dev - Improved deploy mechanism.
 * Fix - Fixed `.gitattributes`.
@@ -386,7 +417,7 @@ Once activated, access the plugin's settings by navigating to “WooCommerce > S
 * Dev - Advanced - Added the `woocommerce_update_order` hook to the option Order calculation hooks.
 
 = 3.9.8 - 10/11/2025 =
-* Dev - Products - Last Update Date now being saved as `_alg_wc_cog_last_update_date` meta.
+* Dev - Products - Last Update Date now being saved as `_wpfcogs_last_update_date` meta.
 
 = 3.9.7 - 07/11/2025 =
 * Dev - Products - Added new option to set a last update date template.
@@ -433,7 +464,7 @@ Once activated, access the plugin's settings by navigating to “WooCommerce > S
 * Dev - Improved prevention of possible duplicate order meta.
 
 = 3.8.5 - 29/08/2025 =
-* Dev - Added `alg_wc_cog_update_order_items_costs_validation` filter.
+* Dev - Added `wpfcogs_update_order_items_costs_validation` filter.
 
 = 3.8.4 - 28/08/2025 =
 * Fix - Product profit was being calculated wrong on admin product page and Analytics Stock report if prices included taxes.
@@ -455,7 +486,7 @@ Once activated, access the plugin's settings by navigating to “WooCommerce > S
 * Dev - Compatibility - Added option to add Profit column to WBW Product Table plugin.
 
 = 3.7.9 - 31/07/2025 =
-* Fix - Fixed possible compatibility error with the plugin Sugar Calendar: "Too few arguments to function Alg_WC_Cost_of_Goods_Bulk_Edit_Tool::disable_screen_option_on_automatically_tab()".
+* Fix - Fixed possible compatibility error with the plugin Sugar Calendar: "Too few arguments to function WPFCOGS_Bulk_Edit_Tool::disable_screen_option_on_automatically_tab()".
 * WC tested up to: 9.9.
 
 = 3.7.8 - 23/07/2025 =
@@ -495,7 +526,7 @@ Once activated, access the plugin's settings by navigating to “WooCommerce > S
 
 = 3.6.9 - 18/04/2025 =
 * Fix - Translation loading was triggered too early.
-* Dev - Added the order item meta profit as `_alg_wc_cog_item_profit`.
+* Dev - Added the order item meta profit as `_wpfcogs_item_profit`.
 * Dev - Orders - Added new option to improve admin new order emails by showing a detailed info of profit and cost for each item.
 * Tested up to: 6.8.
 * WC tested up to: 9.8.
@@ -505,7 +536,7 @@ Once activated, access the plugin's settings by navigating to “WooCommerce > S
 
 = 3.6.7 - 19/03/2025 =
 * Dev - Payment Gateways - Added option to set a fixed profit.
-* Dev - Payment Gateways - Option changed from `alg_wc_cog_gateway_costs_enabled` to `alg_wc_cog_gateways_values_enabled`.
+* Dev - Payment Gateways - Option changed from `wpfcogs_gateway_costs_enabled` to `wpfcogs_gateways_values_enabled`.
 * Dev - Payment Gateways - Code refactored.
 
 = 3.6.6 - 14/03/2025 =

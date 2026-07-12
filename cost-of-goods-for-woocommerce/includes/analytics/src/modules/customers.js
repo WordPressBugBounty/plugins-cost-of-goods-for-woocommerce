@@ -1,6 +1,8 @@
 /**
  * Cost of Goods for WooCommerce - WooCommerce > Customers report.
  *
+ * @version 4.1.5
+ * @since   3.4.6
  */
 
 import {addFilter} from '@wordpress/hooks';
@@ -22,7 +24,7 @@ let customers = {
 					!reportTableData.items ||
 					!reportTableData.items.data ||
 					!reportTableData.items.data.length ||
-					!alg_wc_cog_analytics_obj.cost_and_profit_columns_enabled_on_orders
+					!wpfcogs_analytics_obj.cost_and_profit_columns_enabled_on_customers
 				) {
 					return reportTableData;
 				}
@@ -35,7 +37,7 @@ let customers = {
 
 	getHeaders: function (reportTableData) {
 		let headers = reportTableData.headers;
-		if (alg_wc_cog_analytics_obj.cost_and_profit_columns_enabled_on_customers) {
+		if (wpfcogs_analytics_obj.cost_and_profit_columns_enabled_on_customers) {
 			const costAndProfitHeaders = [
 				{
 					label: __('Cost', 'cost-of-goods-for-woocommerce'),
